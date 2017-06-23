@@ -27,6 +27,7 @@ public class ScoreManager : MonoBehaviour {
 
 		if (scoreCount > hiScoreCount) {
 			hiScoreCount = scoreCount;
+			storeHiScore ();
 		}
 
 		scoreText.text = "" + Mathf.Round (scoreCount);

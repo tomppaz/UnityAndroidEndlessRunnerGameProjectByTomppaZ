@@ -9,15 +9,15 @@ public class RoadGenerator : MonoBehaviour {
 	public float distanceBetween;
 	private float platformWidth;
 	private int roadSelector;
+	private int dangerSelector;
 	private float[] platformWidths;
 	public ObjectPooler[] theObjectPools;
 	private CashGenerator theCashGenerator;
 	public float randomCashTreshold;
 	public float randomDangerTreshold;
-	public ObjectPooler spikePool;
-	public ObjectPooler trashPool;
-	public ObjectPooler firePool;
-	private int randomLol;
+	public ObjectPooler[] theDangerPool;
+	private float dangerXPosition;
+	public float miniumDangerSpawnDistanceFromEdge;
 
 	// Use this for initialization
 	void Start () {
@@ -48,32 +48,22 @@ public class RoadGenerator : MonoBehaviour {
 			}
 
 			if (Random.Range (0f, 100f) < randomDangerTreshold) {
-						randomLol = Random.Range (1,4);
-						if(randomLol == 1)
-						{
-						GameObject newSpike = spikePool.GetPooledObject();
-						Vector3 spikePosition = new Vector3(0f, 0.4f, 0f);
-						newSpike.transform.position = transform.position + spikePosition;
-						newSpike.transform.rotation = transform.rotation;
-						newSpike.SetActive (true);
-						} else if(randomLol == 2)
-						{
-							GameObject newFire = firePool.GetPooledObject();
-							Vector3 firePosition = new Vector3(0f, 0.2f, 0f);
-							newFire.transform.position = transform.position + firePosition;
-							newFire.transform.rotation = transform.rotation;
-							newFire.SetActive (true);
-						} else if(randomLol == 3)
-						{
-							GameObject newTrash = trashPool.GetPooledObject();
-							Vector3 trashPosition = new Vector3(0f, -0.1f, 0f);
-							newTrash.transform.position = transform.position + trashPosition;
-							newTrash.transform.rotation = transform.rotation;
-							newTrash.SetActive (true);
-						}
+				dangerSelector = Random.Range (0, theDangerPool.Length);
+				GameObject newDanger = theDangerPool [dangerSelector].GetPooledObject ();
+
+				dangerXPosition = Random.Range ((-platformWidths [roadSelector] / 2) + miniumDangerSpawnDistanceFromEdge, (platformWidths [roadSelector] / 2) - miniumDangerSpawnDistanceFromEdge);
+
+				float dangerYPosition = Random.Range (0.1f, 0.42f);
+
+				Vector3 dangerPosition = new Vector3 (dangerXPosition, dangerYPosition, 0f);
+				newDanger.transform.position = transform.position + dangerPosition;
+				newDanger.transform.rotation = transform.rotation;
+				newDanger.SetActive (true);
+
+			}
 
 			transform.position = new Vector3(transform.position.x + (platformWidths[roadSelector] / 2), transform.position.y, transform.position.z);
 		}
-	}
+	
 }
 }
